@@ -14,7 +14,6 @@ def get_hanzi_matrix():
 py2hanzi = np.load('../data/py2hanzi.npy').item()
 hanzi_dict = np.load('../data/hanzi_dict.npy').item() # 汉字与编码映射表
 hanzi_matrix = get_hanzi_matrix()
-# hanzi_matrix = np.load('hanzi_matrix.npy') # 词语矩阵
 hanzi_num = np.load('../data/hanzi_num.npy') # 汉字出现次数
 total_num = sum(hanzi_num)
 
@@ -30,21 +29,6 @@ class GraphNode(object): # 有向图节点
         self.max_prob = 0.0
         # 最优路径时，该节点的前一个节点，用来输出路径的时候使用
         self.prev_node = None
-
-class GraphLevel(object): # 有向图中的图层
-    def __init__(self):
-        self.level = []
-
-    def append(self, node):
-        # 添加一个节点
-        self.level.append(node)
-
-class BestPath(object): # 当前最佳路径
-    def __init_(self):
-        self.prob = 0.0
-        self.prev = None
-        self.next = None
-        self.level = 0 # 当前层数
 
 class Graph(object): # 有向图
     def __init__(self, pinyins):
@@ -95,7 +79,7 @@ def viterbi(graph, lamda):
         viterbi_i(i, graph)
 
 
-def bestpath(graph):
+def bestpath(graph): # 获取最佳路径
     level_len = len(graph.levels)
     max_prob = []
     for node in graph.levels[level_len-1]:
@@ -115,8 +99,6 @@ def bestpath(graph):
     while len(result) > 0:
         hz = result.pop()
         real_result+=hz
-        # print(hz, end='')
-    # print('\n')
     return real_result
 
 def get_accuracy(s, s_true):
@@ -158,4 +140,4 @@ def par_sel(lamda):
 if __name__ == '__main__':
     input_py = open('../data/input.txt', 'r')
     output_hz = open('../data/output.txt', 'w')
-    par_sel(0.99999)
+    par_sel(0.99999) # 这里设置不同的lamda取值
