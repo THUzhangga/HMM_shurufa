@@ -66,7 +66,10 @@ def viterbi(graph, lamda):
             for node_k in graph.levels[i-1]: # 对于第i-1层的k节点
                 code_k = hanzi_dict[node_k.hanzi] # 上一层节点的编码
                 num_k = hanzi_num[code_k]
-                P_emission = lamda * node_k.express[code_j] / num_k + (1-lamda) * num_k / total_num # 发射概率，已经平滑
+                if num_k == 0:
+                    P_emission = 0
+                else:
+                    P_emission = lamda * node_k.express[code_j] / num_k + (1-lamda) * num_k / total_num # 发射概率，已经平滑
                 probs.append(node_k.max_prob * P_emission)
 
             # 获取最大概率在i-1层的位置
@@ -111,7 +114,7 @@ def get_accuracy(s, s_true):
 
 def par_sel(lamda):
     for lamda in [lamda]:
-        print(lamda)
+        # print(lamda)
         accuracy = []
         count_line = 0
         for line in input_py:
@@ -141,3 +144,5 @@ if __name__ == '__main__':
     input_py = open('../data/input.txt', 'r')
     output_hz = open('../data/output.txt', 'w')
     par_sel(0.99999) # 这里设置不同的lamda取值
+    input_py.close()
+    output_hz.close()
